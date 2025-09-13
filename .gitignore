@@ -1,0 +1,8 @@
+/chroma_db/
+/logs/
+/venv/
+/__pycache__/
+/viedialWaBot/
+/oldchroma_db_old/
+/upload/
+.env

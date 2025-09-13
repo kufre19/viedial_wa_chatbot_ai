@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viedial Diabetes Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        textarea {
+            height: 100px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+        .upload-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <h1>Viedial Diabetes Assistant</h1>
+    
+    <div class="container">
+        <h2>Ask a Question</h2>
+        <div class="form-group">
+            <label for="question">Your Question:</label>
+            <textarea id="question" placeholder="Enter your diabetes-related question here..."></textarea>
+        </div>
+        <button id="askButton">Ask Question</button>
+        
+        <div id="response" style="display: none;"></div>
+    </div>
+
+    <div class="container">
+        <h2>Test Search</h2>
+        <label for="question">Your Question:</label>
+        <textarea id="question" placeholder="Enter your diabetes-related question here..."></textarea>
+        <button id="testButton">Test Search</button>
+        <div id="testResponse" style="display: none;"></div>
+    </div>
+    
+   
+    
+    <div class="container">
+        <h2>Initialize with Default Document</h2>
+        <button id="initializeButton">Initialize Database</button>
+        <div id="initializeResponse" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById('askButton').addEventListener('click', async () => {
+            const question = document.getElementById('question').value.trim();
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+            
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = 'Loading...';
+            responseDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    responseDiv.textContent = data.answer;
+                } else {
+                    responseDiv.textContent = `Error: ${data.error || 'Unknown error'}`;
+                }
+            } catch (error) {
+                responseDiv.textContent = `Error: ${error.message}`;
+            }
+        });
+        
+        document.getElementById('testButton').addEventListener('click', async () => {
+            const testResponseDiv = document.getElementById('testResponse');
+            testResponseDiv.textContent = 'Testing...';
+            testResponseDiv.style.display = 'block';
+
+            const question = document.getElementById('question').value.trim();
+            try {
+                const response = await fetch('/api/test', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    testResponseDiv.textContent = data.message;
+                } else {
+                    testResponseDiv.textContent = `Error: ${data.error || 'Unknown error'}`;
+                }
+            } catch (error) {
+                testResponseDiv.textContent = `Error: ${error.message}`;
+            }
+        });
+        
+        document.getElementById('initializeButton').addEventListener('click', async () => {
+            const initResponseDiv = document.getElementById('initializeResponse');
+            initResponseDiv.textContent = 'Initializing...';
+            initResponseDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/initialize', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    initResponseDiv.textContent = data.message;
+                } else {
+                    initResponseDiv.textContent = `Error: ${data.error || 'Unknown error'}`;
+                }
+            } catch (error) {
+                initResponseDiv.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

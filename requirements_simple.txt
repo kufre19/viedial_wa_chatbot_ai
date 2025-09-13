@@ -1,0 +1,6 @@
+flask
+openai
+pypdf
+chromadb
+openai
+dotenv
