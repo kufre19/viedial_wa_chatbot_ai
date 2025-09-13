@@ -49,19 +49,11 @@ def ask_question():
     
     question = data['question']
     
+
+    
     
     # Get answer
     result = utils.get_answer_for_question(question)
-    return jsonify(result)
-
-
-
-@app.route('/api/test', methods=['GET'])
-def test():
-    """Test the search functionality."""
-    data = request.get_json()
-    question = data['question']
-    result = utils.test_search(question)
     return jsonify(result)
 
 if __name__ == '__main__':

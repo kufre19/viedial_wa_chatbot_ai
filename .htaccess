@@ -1,0 +1,10 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/viedmzbj/education-ai.viedial.com"
+PassengerBaseURI "/"
+PassengerPython "/home/viedmzbj/virtualenv/education-ai.viedial.com/3.9/bin/python"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+SetEnv OPENAI_API_KEY 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
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END

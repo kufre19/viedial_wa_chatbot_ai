@@ -1,6 +1,12 @@
 flask
+python-docx
 openai
+chromadb
+python-dotenv
+pymupdf
 pypdf
 chromadb
 openai
 dotenv
+pymupdf
+pypdf

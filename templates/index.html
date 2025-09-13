@@ -75,16 +75,18 @@
         
         <div id="response" style="display: none;"></div>
     </div>
-
-    <div class="container">
-        <h2>Test Search</h2>
-        <label for="question">Your Question:</label>
-        <textarea id="question" placeholder="Enter your diabetes-related question here..."></textarea>
-        <button id="testButton">Test Search</button>
-        <div id="testResponse" style="display: none;"></div>
-    </div>
     
-   
+    <div class="container upload-section">
+        <h2>Upload Document</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="documentFile">Select DOCX Document:</label>
+                <input type="file" id="documentFile" name="document" accept=".docx">
+            </div>
+            <button type="submit">Upload Document</button>
+        </form>
+        <div id="uploadResponse" style="display: none;"></div>
+    </div>
     
     <div class="container">
         <h2>Initialize with Default Document</h2>
@@ -125,30 +127,37 @@
             }
         });
         
-        document.getElementById('testButton').addEventListener('click', async () => {
-            const testResponseDiv = document.getElementById('testResponse');
-            testResponseDiv.textContent = 'Testing...';
-            testResponseDiv.style.display = 'block';
-
-            const question = document.getElementById('question').value.trim();
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('documentFile');
+            if (!fileInput.files.length) {
+                alert('Please select a file');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('document', fileInput.files[0]);
+            
+            const uploadResponseDiv = document.getElementById('uploadResponse');
+            uploadResponseDiv.textContent = 'Uploading...';
+            uploadResponseDiv.style.display = 'block';
+            
             try {
-                const response = await fetch('/api/test', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ question })
+                const response = await fetch('/api/upload-document', {
+                    method: 'POST',
+                    body: formData
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    testResponseDiv.textContent = data.message;
+                    uploadResponseDiv.textContent = data.message;
                 } else {
-                    testResponseDiv.textContent = `Error: ${data.error || 'Unknown error'}`;
+                    uploadResponseDiv.textContent = `Error: ${data.error || 'Unknown error'}`;
                 }
             } catch (error) {
-                testResponseDiv.textContent = `Error: ${error.message}`;
+                uploadResponseDiv.textContent = `Error: ${error.message}`;
             }
         });
         

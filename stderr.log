@@ -1,0 +1,114 @@
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+Traceback (most recent call last):
+  File "/home/viedmzbj/education-ai.viedial.com/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'app.py')
+  File "/opt/alt/python39/lib64/python3.9/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 711, in _load
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 983, in get_code
+  File "<frozen importlib._bootstrap_external>", line 913, in source_to_code
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "app.py", line 53
+    logging.basicConfig(
+IndentationError: unexpected indent
+[UID:627][3097280] Killing runaway process PID: 3097591 with SIGTERM
+[UID:627][3097280] Child process with pid: 3097591 was killed by signal: 15, core dumped: no
