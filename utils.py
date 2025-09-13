@@ -150,15 +150,20 @@ def search_similar_chunks(query, initial_n=20, final_n=5):
     collection = chroma_client.get_or_create_collection(
         name="diabetes_docs", embedding_function=openai_ef
     )
+    
 
     results = collection.query(query_texts=[query], n_results=initial_n)
     candidate_chunks = results["documents"][0]
     
+   
+    
     if not candidate_chunks:
         return []
 
-    # reranked = rerank_chunks(query, candidate_chunks, top_n=final_n)
-    return candidate_chunks
+    print("re ranking chunks")
+    reranked = rerank_chunks(query, candidate_chunks, top_n=final_n)
+    
+    return reranked
 
 
 def generate_response(query, context_chunks):
@@ -432,12 +437,14 @@ def test_search(query, initial_n=20, final_n=5):
         
         print(f"\nTest Search for query: '{query}'")
         print(f"Retrieved {len(chunks)} chunks after reranking (from initial {initial_n}):")
+        formatted_chunks = []
         
         for i, chunk in enumerate(chunks):
             preview = chunk[:300].replace('\n', ' ')  # Clean up for printing
+            formatted_chunks.append(f"Chunk {i+1} (preview): {preview}...")
             print(f"\nChunk {i+1} (preview): {preview}...")
         
-        return chunks
+        return formatted_chunks
     except Exception as e:
         print(f"Error during test search: {str(e)}")
         return []

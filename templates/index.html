@@ -79,7 +79,7 @@
     <div class="container">
         <h2>Test Search</h2>
         <label for="question">Your Question:</label>
-        <textarea id="question" placeholder="Enter your diabetes-related question here..."></textarea>
+        <textarea id="testquestion" placeholder="Enter your diabetes-related question here..."></textarea>
         <button id="testButton">Test Search</button>
         <div id="testResponse" style="display: none;"></div>
     </div>
@@ -130,7 +130,7 @@
             testResponseDiv.textContent = 'Testing...';
             testResponseDiv.style.display = 'block';
 
-            const question = document.getElementById('question').value.trim();
+            const question = document.getElementById('testquestion').value.trim();
             try {
                 const response = await fetch('/api/test', {
                     method: 'POST',
@@ -141,6 +141,7 @@
                 });
                 
                 const data = await response.json();
+                
                 
                 if (data.success) {
                     testResponseDiv.textContent = data.message;

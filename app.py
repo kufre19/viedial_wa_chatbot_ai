@@ -61,6 +61,8 @@ def test():
     """Test the search functionality."""
     data = request.get_json()
     question = data['question']
+   
+   
     result = utils.test_search(question)
     return jsonify(result)
 
