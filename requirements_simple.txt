@@ -4,3 +4,4 @@ pypdf
 chromadb
 openai
 dotenv
+scikit-learn

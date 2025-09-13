@@ -6,7 +6,7 @@ def install_packages(packages):
     subprocess.check_call([sys.executable, "-m", "pip", "install", *packages])
     
     
-packages = ["chromadb", "openai", "pymupdf", "pypdf", "dotenv","flask"]
+packages = ["chromadb", "openai", "pymupdf", "pypdf", "dotenv","flask","scikit-learn"]
 
 install_packages(packages)
 

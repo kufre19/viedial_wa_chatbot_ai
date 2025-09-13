@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-09-13_17-12-56",
+  "user_question": "what is type 2 diabetes",
+  "context_chunks": [
+    "Have a family history of type 2 diabetes.",
+    "Family history of type 2 diabetes.",
+    "What about type 1 diabetes?",
+    "Have a parent or sibling with type 2 diabetes.",
+    "Prediabetes is a major risk factor for type 2 diabetes.",
+    "About Insulin Resistance and Type 2 Diabetes\nKEY POINTS\nInsulin resistance leads to prediabetes and type 2 diabetes.",
+    "You may have type 1 or type 2 diabetes instead.",
+    "Having a parent, brother, or sister with type 2 diabetes.",
+    "If you ignore it, your risk for type 2 diabetes goes up.",
+    "The best time to prevent type 2 diabetes\nis now.",
+    "But having a history of gestational diabetes increases your risk for type 2 diabetes.",
+    "You can reverse prediabetes to prevent or delay type 2 diabetes.",
+    "Having ketones in your urine indicates\nyou have type 1 diabetes instead of type 2.",
+    "Lifestyle changes can stop or slow the development of type 2 diabetes.",
+    "Catching prediabetes early can help people prevent or delay type 2 diabetes. Finding out they have type 2 diabetes\u2014and taking action\u2014can\nhelp people prevent or delay serious health complications.",
+    "CONTENT SOURCE:\nNational Center for Chronic Disease Prevention and Health Promotion; Diabetes\n8/14/25, 8:37 PM About Insulin Resistance and Type 2 Diabetes | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/about/insulin-resistance-type-2-diabetes.html 2/2",
+    "If you already have prediabetes, this is an added risk factor that makes\nyou more likely to develop type 2 diabetes. You're at risk for both prediabetes and type 2 diabetes if you:\nHave overweight or obesity.",
+    "Prediabetes puts you at increased risk of developing type 2 diabetes, heart disease, and stroke.",
+    "SOURCES\nType 1 diabetes is different from insulin resistance.",
+    "Insulin resistance sets the stage for\nprediabetes and type 2 diabetes."
+  ],
+  "prompt": "\n        Rate the relevance of the following text to the query on a scale of 0 to 10, where 10 is highly relevant.\n        Only respond with the number.\n\n        Query: what is type 2 diabetes\n        Text: Prediabetes is a major risk factor for type 2 diabetes.  # Truncate to avoid token limits\n        ",
+  "response": "rerank_chunks"
+}
