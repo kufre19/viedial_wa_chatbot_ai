@@ -122,6 +122,12 @@ def rerank_chunks(query, chunks, top_n=5):
         Query: {query}
         Text: {chunk[:1000]}  # Truncate to avoid token limits
         """
+
+        # log the prompt
+        
+        log_interaction(query, chunks, prompt, "rerank_chunks")
+        
+        
         response = openai_client.chat.completions.create(
             model="gpt-4-turbo",
             messages=[{"role": "user", "content": prompt}],
@@ -151,8 +157,8 @@ def search_similar_chunks(query, initial_n=20, final_n=5):
     if not candidate_chunks:
         return []
 
-    reranked = rerank_chunks(query, candidate_chunks, top_n=final_n)
-    return reranked
+    # reranked = rerank_chunks(query, candidate_chunks, top_n=final_n)
+    return candidate_chunks
 
 
 def generate_response(query, context_chunks):

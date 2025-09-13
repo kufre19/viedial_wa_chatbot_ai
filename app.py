@@ -56,7 +56,7 @@ def ask_question():
 
 
 
-@app.route('/api/test', methods=['GET'])
+@app.route('/api/test', methods=['POST'])
 def test():
     """Test the search functionality."""
     data = request.get_json()

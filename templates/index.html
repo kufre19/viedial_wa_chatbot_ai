@@ -133,7 +133,7 @@
             const question = document.getElementById('question').value.trim();
             try {
                 const response = await fetch('/api/test', {
-                    method: 'GET',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
