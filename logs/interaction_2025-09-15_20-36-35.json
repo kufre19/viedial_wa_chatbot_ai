@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-09-15_20-36-35",
+  "user_question": "hey please how does daibetes affect the brain",
+  "context_chunks": [
+    "Your Brain and Diabetes\nKEY POINTS\nYour brain is sensitive to the amount of glucose (sugar) it receives.",
+    "Diabetes can damage blood vessels in the brain and cause a stroke or memory loss.",
+    "The diabetes-brain connection\nYour brain is your body's command center.",
+    "For Everyone\nJULY 16, 2024 \u2022\nDiabetes\n8/14/25, 9:10 PM Your Brain and Diabetes | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/diabetes-complications/effects-of-diabetes-brain.html 1/2",
+    "In the same way diabetes can damage\nnerves in other parts of your body, it can damage nerves in your brain.",
+    "Diabetes affects every major organ in the body.",
+    "SOURCES\nCONTENT SOURCE:\nNational Center for Chronic Disease Prevention and Health Promotion; Diabetes\n8/14/25, 9:10 PM Your Brain and Diabetes | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/diabetes-complications/effects-of-diabetes-brain.html 2/2",
+    "Both high and low blood sugar can damage blood vessels in the brain.",
+    "These healthy habits can help you manage your\ndiabetes and support your brain health.",
+    "Keep brain health top of mind\nYou can take steps to improve or prevent problems with brain health and diabetes, such as:\nFollow a healthy eating plan.",
+    "You can help protect your brain by keeping your blood sugar levels close to your\ntarget.",
+    "High blood sugar over time damages blood vessels in the brain that carry oxygen-rich blood.",
+    "People with diabetes often develop major complications, including kidney failure, blindness, and\nnerve damage.",
+    "High blood sugar\nHaving frequent episodes of high blood sugar (hyperglycemia) can stress the brain.",
+    "Some research shows that big dips in blood sugar may be linked to problems with depression, memory, and attention.",
+    "What about type 1 diabetes?",
+    "People with diabetes are at higher risk\nfor heart disease.",
+    "For example, many people with diabetes also have high blood pressure, which in turn worsens eye and kidney diseases.",
+    "KEEP READING:\nTesting for Diabetes\nDiabetes is harder to live with than prediabetes\nPeople with prediabetes have a higher risk of heart disease and stroke.",
+    "To do all its work, your brain uses sugar in your blood for energy."
+  ],
+  "prompt": "\n        Rate the relevance of the following text to the query on a scale of 0 to 10, where 10 is highly relevant.\n        Only respond with the number.\n\n        Query: hey please how does daibetes affect the brain\n        Text: For Everyone\nJULY 16, 2024 \u2022\nDiabetes\n8/14/25, 9:10 PM Your Brain and Diabetes | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/diabetes-complications/effects-of-diabetes-brain.html 1/2  # Truncate to avoid token limits\n        ",
+  "response": "rerank_chunks"
+}

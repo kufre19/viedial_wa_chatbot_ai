@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-09-15_20-31-48",
+  "user_question": "hey please i want to know more about stage two cancer",
+  "context_chunks": [
+    "I Have Diabetes and Cancer.",
+    "Cancer treatment can disrupt your diabetes eating plan.",
+    "Catching prediabetes early can help people prevent or delay type 2 diabetes. Finding out they have type 2 diabetes\u2014and taking action\u2014can\nhelp people prevent or delay serious health complications.",
+    "KEEP READING:\nDiabetes Risk Factors\nWhen to get tested\nType 2 diabetes or prediabetes\nAsk your doctor about getting tested for prediabetes or type 2 diabetes if you have any of the risk factors.",
+    "Find out more about what it is, what causes it, and how you can reverse it.",
+    "Talk to your doctor if you think you might have insulin resistance, or want to find out more.",
+    "It's important to know your symptoms.",
+    "th\nFor Everyone\nMAY 15, 2024 \u2022\nDiabetes\n8/14/25, 7:56 PM Diabetes Testing | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/diabetes-testing/index.html 1/3",
+    "Have a parent or sibling with type 2 diabetes.",
+    "Ask the team about support groups near you or online.",
+    "\uf10f \nFor Everyone\nMAY 15, 2024 \u2022\nDiabetes\n8/14/25, 8:37 PM About Insulin Resistance and Type 2 Diabetes | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/about/insulin-resistance-type-2-diabetes.html 1/2",
+    "Be sure to talk with your health care team to keep going in the right direction.",
+    "Find out what you can do to prevent or delay diabetes health problems.",
+    "After a diagnosis\nIf your results show you have type 1, type 2, or gestational diabetes, talk with your doctor about a detailed treatment plan.",
+    "2.",
+    "2.",
+    "2.",
+    "KEEP READING:\nTesting for Diabetes\nDiabetes is harder to live with than prediabetes\nPeople with prediabetes have a higher risk of heart disease and stroke.",
+    "Knowing how to identify and treat it is important for your health.",
+    "Have a family history of type 2 diabetes."
+  ],
+  "prompt": "\n        Rate the relevance of the following text to the query on a scale of 0 to 10, where 10 is highly relevant.\n        Only respond with the number.\n\n        Query: hey please i want to know more about stage two cancer\n        Text: Have a parent or sibling with type 2 diabetes.  # Truncate to avoid token limits\n        ",
+  "response": "rerank_chunks"
+}

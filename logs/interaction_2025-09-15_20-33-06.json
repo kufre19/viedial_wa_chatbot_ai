@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-09-15_20-33-06",
+  "user_question": "hey please i want to know more about type 2 diabetes",
+  "context_chunks": [
+    "What about type 1 diabetes?",
+    "Have a family history of type 2 diabetes.",
+    "Family history of type 2 diabetes.",
+    "Have a parent or sibling with type 2 diabetes.",
+    "\uf10f \nFor Everyone\nMAY 15, 2024 \u2022\nDiabetes\n8/14/25, 8:37 PM About Insulin Resistance and Type 2 Diabetes | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/about/insulin-resistance-type-2-diabetes.html 1/2",
+    "CONTENT SOURCE:\nNational Center for Chronic Disease Prevention and Health Promotion; Diabetes\n8/14/25, 8:37 PM About Insulin Resistance and Type 2 Diabetes | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/about/insulin-resistance-type-2-diabetes.html 2/2",
+    "Catching prediabetes early can help people prevent or delay type 2 diabetes. Finding out they have type 2 diabetes\u2014and taking action\u2014can\nhelp people prevent or delay serious health complications.",
+    "The best time to prevent type 2 diabetes\nis now.",
+    "Find out your risk for each type of diabetes.",
+    "After a diagnosis\nIf your results show you have type 1, type 2, or gestational diabetes, talk with your doctor about a detailed treatment plan.",
+    "KEEP READING:\nPrediabetes \u2013 your chance to prevent type 2 diabetes\nGestational diabetes\nYou're at risk for gestational diabetes (diabetes while pregnant) if you:\nFor Everyone\nMAY 15, 2024 \u2022\nDiabetes\n8/14/25, 7:56 PM Diabetes Risk Factors | Diabetes | CDC\nhttps://www.cdc.gov/diabetes/risk-factors/index.html 1/2",
+    "KEEP READING:\nDiabetes Risk Factors\nWhen to get tested\nType 2 diabetes or prediabetes\nAsk your doctor about getting tested for prediabetes or type 2 diabetes if you have any of the risk factors.",
+    "You can reverse prediabetes to prevent or delay type 2 diabetes.",
+    "Having a parent, brother, or sister with type 2 diabetes.",
+    "If you ignore it, your risk for type 2 diabetes goes up.",
+    "SOURCES\nType 1 diabetes is different from insulin resistance.",
+    "Prediabetes is a major risk factor for type 2 diabetes.",
+    "The CDC-led National Diabetes Prevention Program (National DPP) can help people prevent or delay type 2 diabetes.",
+    "But having a history of gestational diabetes increases your risk for type 2 diabetes.",
+    "You may have type 1 or type 2 diabetes instead."
+  ],
+  "prompt": "\n        Rate the relevance of the following text to the query on a scale of 0 to 10, where 10 is highly relevant.\n        Only respond with the number.\n\n        Query: hey please i want to know more about type 2 diabetes\n        Text: Prediabetes is a major risk factor for type 2 diabetes.  # Truncate to avoid token limits\n        ",
+  "response": "rerank_chunks"
+}
