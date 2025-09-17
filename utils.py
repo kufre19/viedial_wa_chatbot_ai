@@ -34,7 +34,7 @@ openai_ef = embedding_functions.OpenAIEmbeddingFunction(
 )
 
 
-def log_interaction(user_question, context_chunks, prompt, response):
+def log_interaction(user_question,formulated_query, history, context_chunks, prompt, response):
     """Log the interaction details to a file."""
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     log_file = os.path.join(logs_directory, f"interaction_{timestamp}.json")
@@ -42,6 +42,8 @@ def log_interaction(user_question, context_chunks, prompt, response):
     log_data = {
         "timestamp": timestamp,
         "user_question": user_question,
+        "formulated_query": formulated_query,
+        "history": history,
         "context_chunks": context_chunks,
         "prompt": prompt,
         "response": response,
@@ -125,8 +127,7 @@ def rerank_chunks(query, chunks, top_n=5):
 
         # log the prompt
         
-        log_interaction(query, chunks, prompt, "rerank_chunks")
-        
+    
         
         response = openai_client.chat.completions.create(
             model="gpt-4-turbo",
@@ -166,14 +167,11 @@ def search_similar_chunks(query, initial_n=20, final_n=5):
     return reranked
 
 
-def generate_response(query, context_chunks):
+def generate_response(query, context_chunks, history=[]):
     """Generate a response from OpenAI with the context pages."""
-    prompt = f"""
+    system_prompt = """
     You are a helpful medical assistant specializing in diabetes care and management.
     You are answering questions from patients who use the Viedial mobile and web application for diabetes management.
-
-    I'll provide you with some relevant information about diabetes extracted from reliable medical documents,
-    and a question from a user. Please answer their question based on the information provided.
 
     IF A QUESTION FROM A USER DOES NOT PERTAIN TO DIABETES PLEASE RESPOND THAT YOU DO NOT HAVE AN ANSWER TO THAT.
     IF THE PROVIDED INFORMATION DOES NOT CONTAIN SOMETHING RELEVANT TO THE USER QUESTION, ACKNOWLEDGE THAT AND RESPOND THAT YOU DO NOT HAVE
@@ -192,33 +190,39 @@ def generate_response(query, context_chunks):
     3. If you don't have enough information to answer confidently, acknowledge that.
     4. Don't include citations or references to the source documents.
     5. Provide 2-3 suggested follow-up questions at the end of your response that the user might want to ask next.
+    """
+
+    context_str = ' '.join(context_chunks) if context_chunks else "No context available."
+
+    user_prompt = f"""
+    Here is some relevant information about diabetes extracted from reliable medical documents:
 
     CONTEXT INFORMATION:
-    {' '.join(context_chunks)}
+    {context_str}
 
     USER QUESTION:
     {query}
-
-    RESPONSE:
     """
+
+    messages = [
+        {"role": "system", "content": system_prompt.strip()},
+    ] + history + [
+        {"role": "user", "content": user_prompt.strip()},
+    ]
 
     response = openai_client.chat.completions.create(
         model="gpt-4-turbo",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful, accurate, and compassionate diabetes care assistant.",
-            },
-            {"role": "user", "content": prompt},
-        ],
+        messages=messages,
         temperature=0.7,
         max_tokens=1000,
     )
 
     response_content = response.choices[0].message.content
 
-    # Log the interaction
-    log_interaction(query, context_chunks, prompt, response_content)
+    # For logging
+    prompt_log = "\n\n".join([f"{m['role'].upper()}: {m['content']}" for m in messages])
+
+    # log_interaction(query, formulated_query, history, context_chunks, prompt_log, response_content)
 
     return response_content
 
@@ -275,16 +279,59 @@ def auto_generate_chat_title(question):
     return {"success": True, "title": response_content}
 
 
-def get_answer_for_question(question):
+def formulate_search_query(question, history=[]):
+    """Reformulate the user's question into a standalone search query using conversation history."""
+    if not history:
+        return question
+    
+    # Format history as string
+    history_str = "\n".join([f"{msg['role'].capitalize()}: {msg['content']}" for msg in history])
+    
+    prompt = f"""
+    You are an assistant that reformulates user questions for semantic search in a diabetes knowledge base.
+    
+    Given the conversation history and the latest user question, create a standalone search query that:
+    - Captures the full intent of the latest question in the context of the history.
+    - Is clear, complete, and self-contained (doesn't rely on pronouns or implicit references).
+    - Is phrased as a question or search phrase suitable for retrieving relevant medical information.
+    - Preserves the original meaning and any specific requests (e.g., "explain like I'm 5").
+    
+    Only output the reformulated search query, nothing else.
+    
+    Conversation history:
+    {history_str}
+    
+    Latest question: {question}
+    """
+    
+    response = openai_client.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[
+            {"role": "system", "content": "You are a query reformulation expert."},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.3,
+        max_tokens=100,
+    )
+    
+    reformulated = response.choices[0].message.content.strip()
+    return reformulated
+
+
+def get_answer_for_question(question, history=[]):
     """Get answer for a user question using retrieval augmented generation."""
     try:
-        # make the question gramaticaly correct
-        # question = correct_grammar_and_spellings(question)
-        # Search for relevant pages
-        context_pages = search_similar_chunks(question)
+        # Reformulate search query
+        search_query = formulate_search_query(question, history)
+        
+        # Search for relevant pages using reformulated query
+        context_pages = search_similar_chunks(search_query)
 
-        # Generate response using OpenAI
-        response = generate_response(question, context_pages)
+        # Generate response using OpenAI with original question
+        response = generate_response(question, context_pages, history)
+        log_interaction(question, search_query, history, context_pages, "prompt_log", response)
+        
+
 
         return {"success": True, "answer": response, "sources": len(context_pages)}
     except Exception as e:

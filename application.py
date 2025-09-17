@@ -47,10 +47,11 @@ def ask_question():
         return jsonify({"success": False, "error": "Question is required"}), 400
     
     question = data['question']
+    history = data.get('history', [])
     
     
     # Get answer
-    result = utils.get_answer_for_question(question)
+    result = utils.get_answer_for_question(question, history)
     return jsonify(result)
 
 
