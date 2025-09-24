@@ -170,19 +170,23 @@ def search_similar_chunks(query, initial_n=20, final_n=5):
 def generate_response(query, context_chunks, history=[]):
     """Generate a response from OpenAI with the context pages."""
     system_prompt = """
-    You are a helpful medical assistant specializing in diabetes care and management.
-    You are answering questions from patients who use the Viedial mobile and web application for diabetes management.
+    You are a helpful medical assistant specializing in diabetes, hypertension, or cardiovascular disease care and management.
+    You are answering questions from patients who use the Viedial mobile and web application for the following topics only:
+    1.Diabetes
+    2.Hypertension
+    3.Cardiovascular Disease
+  
 
     IF A QUESTION FROM A USER DOES NOT PERTAIN TO DIABETES PLEASE RESPOND THAT YOU DO NOT HAVE AN ANSWER TO THAT.
     IF THE PROVIDED INFORMATION DOES NOT CONTAIN SOMETHING RELEVANT TO THE USER QUESTION, ACKNOWLEDGE THAT AND RESPOND THAT YOU DO NOT HAVE
     AN ANSWER TO THAT!
     IF THE CONTEXT INFORMATION IS EMPTY, PLEASE RESPOND WITH:
-    "I apologize, but I don't have enough reliable medical information in my database to properly answer your question about diabetes.
+    "I apologize, but I don't have enough reliable medical information in my database to properly answer your question about diabetes, hypertension, or cardiovascular disease.
 
     Here are some follow-up questions you may want to ask your healthcare provider:
-    1. What are the most reliable sources for diabetes information?
-    2. Can you recommend any diabetes education programs?
-    3. What specific aspects of diabetes would you like me to learn more about?"
+    1. What are the most reliable sources for diabetes, hypertension, or cardiovascular disease information?
+    2. Can you recommend any diabetes, hypertension, or cardiovascular disease education programs?
+    3. What specific aspects of diabetes, hypertension, or cardiovascular disease would you like me to learn more about?"
 
     When responding:
     1. Be compassionate and conversational, but accurate and precise.
@@ -195,7 +199,7 @@ def generate_response(query, context_chunks, history=[]):
     context_str = ' '.join(context_chunks) if context_chunks else "No context available."
 
     user_prompt = f"""
-    Here is some relevant information about diabetes extracted from reliable medical documents:
+    Here is some relevant information about diabetes, hypertension, or cardiovascular disease extracted from reliable medical documents:
 
     CONTEXT INFORMATION:
     {context_str}
@@ -253,8 +257,12 @@ def correct_grammar_and_spellings(question):
 def auto_generate_chat_title(question):
     """Auto generate a chat title based on the question."""
     prompt = f"""
-    You are a helpful medical assistant specializing in diabetes care and management.
-    You are answering questions from patients who use the Viedial mobile and web application for diabetes management.
+    You are a helpful medical assistant specializing in diabetes, hypertension, or cardiovascular disease care and management.
+    You are answering questions from patients who use the Viedial mobile and web application for the following topics only:
+    1.Daibetes
+    2.Hypertension
+    3.Cardiovascular Disease
+
 
     I'll provide you with a question from a user. Please generate a title for a chat based on the question and return only the title and keep it short.
 
@@ -268,7 +276,7 @@ def auto_generate_chat_title(question):
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful, accurate, and compassionate diabetes care assistant.",
+                "content": "You are a helpful, accurate, and compassionate diabetes, hypertension, or cardiovascular disease care assistant.",
             },
             {"role": "user", "content": prompt},
         ],
@@ -382,29 +390,30 @@ def create_embeddings_from_folder(folder_path):
         all_metadatas = []
         total_chunks = 0
 
-        for filename in os.listdir(folder_path):
-            if filename.lower().endswith(".pdf"):
-                pdf_path = os.path.join(folder_path, filename)
-                try:
-                    pages = extract_text_from_pdf(pdf_path)
-                    doc_name = os.path.basename(filename).replace(" ", "_").replace(".pdf", "")
-                    for page_num, page in enumerate(pages):
-                        if not page.strip():
-                            continue
-                        page_chunks = semantic_chunk(page)
-                        for chunk_idx, chunk in enumerate(page_chunks):
-                            all_chunks.append(chunk)
-                            chunk_id = f"{doc_name}_page_{page_num}_chunk_{chunk_idx}"
-                            all_ids.append(chunk_id)
-                            all_metadatas.append({
-                                "page_number": page_num + 1,
-                                "chunk_index": chunk_idx,
-                                "source": filename
-                            })
-                            total_chunks += 1
-                except Exception as e:
-                    print(f"Error processing {filename}: {e}")
-                    continue
+        for root, dirs, files in os.walk(folder_path):
+            for filename in files:
+                if filename.lower().endswith(".pdf"):
+                    pdf_path = os.path.join(root, filename)
+                    rel_path = os.path.relpath(pdf_path, folder_path).replace(".pdf", "").replace(os.sep, "_").replace(" ", "_")
+                    try:
+                        pages = extract_text_from_pdf(pdf_path)
+                        for page_num, page in enumerate(pages):
+                            if not page.strip():
+                                continue
+                            page_chunks = semantic_chunk(page)
+                            for chunk_idx, chunk in enumerate(page_chunks):
+                                all_chunks.append(chunk)
+                                chunk_id = f"{rel_path}_page_{page_num}_chunk_{chunk_idx}"
+                                all_ids.append(chunk_id)
+                                all_metadatas.append({
+                                    "page_number": page_num + 1,
+                                    "chunk_index": chunk_idx,
+                                    "source": os.path.relpath(pdf_path, folder_path)
+                                })
+                                total_chunks += 1
+                    except Exception as e:
+                        print(f"Error processing {pdf_path}: {e}")
+                        continue
 
         # Step 4: Add all chunks in batch
         if all_chunks:

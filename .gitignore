@@ -4,4 +4,6 @@
 /viedialWaBot/
 /oldchroma_db_old/
 /upload/
+/logs/
 .env
+viedial-key-pair.pem
