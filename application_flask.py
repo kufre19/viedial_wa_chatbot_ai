@@ -1,0 +1,70 @@
+import os
+from flask import Flask, request, jsonify, render_template
+from werkzeug.utils import secure_filename
+import utils
+
+application = Flask(__name__)
+
+# Default document path
+DEFAULT_FOLDER = "documents"
+
+@application.route('/', methods=['GET'])
+def indexTest():
+    # render the html file 
+    return render_template('index.html')
+
+
+@application.route('/api/initialize', methods=['POST'])
+def initialize():
+    """Initialize the embedding database with all documents in the folder."""
+    try:
+        documents_dir = os.path.join(os.path.dirname(__file__), DEFAULT_FOLDER)
+        result = utils.process_folder_and_create_embeddings(documents_dir)
+        return jsonify(result)
+    except Exception as e:
+        # Log the error to a file
+        with open('error.log', 'a') as f:
+            f.write(f"Error during initialization: {str(e)}\n")
+        return jsonify({"success": False, "error": str(e)}), 500
+    
+    
+@application.route('/api/auto_generate_chat_title', methods=['POST'])
+def auto_generate_chat_title():
+    """Auto generate a chat title based on the question."""
+    data = request.get_json()
+    question = data['question']
+    result = utils.auto_generate_chat_title(question)
+    return jsonify(result)
+
+
+
+@application.route('/api/ask', methods=['POST'])
+def ask_question():
+    """Answer a question based on the document."""
+    data = request.get_json()
+    
+    if not data or 'question' not in data:
+        return jsonify({"success": False, "error": "Question is required"}), 400
+    
+    question = data['question']
+    history = data.get('history', [])
+    
+    
+    # Get answer
+    result = utils.get_answer_for_question(question, history)
+    return jsonify(result)
+
+
+
+@application.route('/api/test', methods=['POST'])
+def test():
+    """Test the search functionality."""
+    data = request.get_json()
+    question = data['question']
+   
+   
+    result = utils.test_search(question)
+    return jsonify(result)
+
+if __name__ == '__main__':
+  application.run(host='0.0.0.0', port=5000) 

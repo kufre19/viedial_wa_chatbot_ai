@@ -1,0 +1,25 @@
+@baseUrl = http://127.0.0.1:8001
+
+### GET / — Health check / root
+GET {{baseUrl}}/
+Accept: application/json
+
+### POST /api/auto_generate_chat_title — Auto-generate a chat title
+POST {{baseUrl}}/api/auto_generate_chat_title
+Content-Type: application/json
+Accept: application/json
+
+{
+  "question": "What are the best dietary changes to manage blood sugar levels for someone with type 2 diabetes?",
+  "history": []
+}
+
+### POST /api/ask — Ask a question
+POST {{baseUrl}}/api/ask
+Content-Type: application/json
+Accept: application/json
+
+{
+  "question": "What are the symptoms and early warning signs of type 2 diabetes?",
+  "history": []
+}

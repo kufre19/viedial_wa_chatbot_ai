@@ -1,7 +1,8 @@
-flask
+fastapi
 openai
 pypdf
 chromadb
 openai
 dotenv
 scikit-learn
+uvicorn
