@@ -49,11 +49,10 @@ def ask_question(chat: Chat):
     
     
 @app.post("/api/test")
-def test():
+def test(chat: Chat):
     """Test the search functionality."""
-    data = request.get_json()
-    question = data['question']
+    question = chat.question
    
    
     result = utils.test_search(question)
-    return jsonify(result)
+    return result
