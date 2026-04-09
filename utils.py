@@ -337,7 +337,7 @@ def get_answer_for_question(question, history=[]):
 
         # Generate response using OpenAI with original question
         response = generate_response(question, context_pages, history)
-        log_interaction(question, search_query, history, context_pages, "prompt_log", response)
+        # log_interaction(question, search_query, history, context_pages, "prompt_log", response)
         
 
 
