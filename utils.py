@@ -441,10 +441,10 @@ def create_embeddings_from_folder(folder_path):
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         log_file = os.path.join(log_dir, f"folder_embeddings_log_{timestamp}.json")
 
-        with open(log_file, "w") as f:
-            json.dump(log_data, f, indent=2)
+        # with open(log_file, "w") as f:
+        #     json.dump(log_data, f, indent=2)
 
-        print(f"Folder embedding process completed. Log saved to {log_file}")
+        # print(f"Folder embedding process completed. Log saved to {log_file}")
         return total_chunks
 
     except Exception as e:
@@ -460,10 +460,10 @@ def create_embeddings_from_folder(folder_path):
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         log_file = os.path.join(log_dir, f"folder_embeddings_error_{timestamp}.json")
 
-        with open(log_file, "w") as f:
-            json.dump(log_data, f, indent=2)
+        # with open(log_file, "w") as f:
+        #     json.dump(log_data, f, indent=2)
 
-        print(f"Folder embedding process failed. Error log saved to {log_file}")
+        # print(f"Folder embedding process failed. Error log saved to {log_file}")
         raise
 
 
