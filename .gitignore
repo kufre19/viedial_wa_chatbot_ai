@@ -3,7 +3,6 @@
 /.venv/
 /oldchroma_db_old/
 /upload/
-/logs/
 .env
 viedial_hostinger_ssh
 viedial_hostinger_ssh.pub

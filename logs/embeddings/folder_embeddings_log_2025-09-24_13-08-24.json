@@ -1,0 +1,23 @@
+{
+  "folder": "/home/emmanuel/Desktop/projects/viedial_ai/viedial_wa_chatbot_ai/documents",
+  "status": "completed",
+  "steps": [
+    {
+      "step": "create_collection",
+      "status": "completed",
+      "collection_name": "diabetes_docs"
+    },
+    {
+      "step": "clear_existing_data",
+      "status": "completed",
+      "ids_deleted": 396
+    },
+    {
+      "step": "process_pdfs",
+      "status": "completed",
+      "total_chunks_added": 1993
+    }
+  ],
+  "success": true,
+  "total_chunks": 1993
+}

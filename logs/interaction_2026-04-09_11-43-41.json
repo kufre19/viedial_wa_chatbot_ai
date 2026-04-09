@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-04-09_11-43-41",
+  "user_question": "what are the symptoms of cvd",
+  "formulated_query": "what are the symptoms of cvd",
+  "history": [],
+  "context_chunks": [
+    "Recognize the signs and symptoms of mental health disorders and heart disease.",
+    "Recognize the signs and symptoms of mental health disorders and heart disease.",
+    "An individual with coronary heart disease will have chest \npain when they attempt to exercise or do strenuous activities.",
+    "It's important to know your symptoms.",
+    "Cardiovascular complications  \nType 2 diabetes can lead to cardiovascular disease complications."
+  ],
+  "prompt": "prompt_log",
+  "response": "Cardiovascular disease (CVD) encompasses a range of conditions affecting the heart and blood vessels. The symptoms can vary based on the specific type of cardiovascular disease, but common signs include:\n\n1. Chest pain or discomfort (angina), which may occur during exercise or strenuous activities.\n2. Shortness of breath.\n3. Fatigue or feeling unusually tired.\n4. Swelling in the legs, ankles, or feet.\n5. Irregular heartbeat.\n\nIt's important to recognize these symptoms early and consult with a healthcare provider for proper diagnosis and management. If you experience any of these symptoms, especially chest pain, it's crucial to seek immediate medical attention.\n\nHere are some follow-up questions you may want to ask your healthcare provider:\n1. What tests are needed to diagnose cardiovascular disease?\n2. How can I manage my symptoms and reduce the risk of complications?\n3. Are there specific lifestyle changes I should consider to improve my heart health?"
+}
