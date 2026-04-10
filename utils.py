@@ -32,6 +32,9 @@ chroma_client = chromadb.PersistentClient(path=db_directory)
 openai_ef = embedding_functions.OpenAIEmbeddingFunction(
     api_key=openai_api_key, model_name="text-embedding-3-small"
 )
+diabetes_collection = chroma_client.get_or_create_collection(
+    name="diabetes_docs", embedding_function=openai_ef
+)
 
 
 def log_interaction(user_question,formulated_query, history, context_chunks, prompt, response):
@@ -148,12 +151,7 @@ def rerank_chunks(query, chunks, top_n=5):
 
 def search_similar_chunks(query, initial_n=20, final_n=5):
     """Search for chunks most similar to the query, then rerank."""
-    collection = chroma_client.get_or_create_collection(
-        name="diabetes_docs", embedding_function=openai_ef
-    )
-    
-
-    results = collection.query(query_texts=[query], n_results=initial_n)
+    results = diabetes_collection.query(query_texts=[query], n_results=initial_n)
     candidate_chunks = results["documents"][0]
     
    
@@ -264,7 +262,7 @@ def auto_generate_chat_title(question):
     3.Cardiovascular Disease
 
 
-    I'll provide you with a question from a user. Please generate a title for a chat based on the question and return only the title and keep it short.
+    I'll provide you with a question from a user. generate a title for a chat based on the question and return only the title and keep it short.
 
     USER QUESTION:
     {question}
@@ -330,14 +328,14 @@ def get_answer_for_question(question, history=[]):
     """Get answer for a user question using retrieval augmented generation."""
     try:
         # Reformulate search query
-        search_query = formulate_search_query(question, history)
+        # search_query = formulate_search_query(question, history)
         
         # Search for relevant pages using reformulated query
-        context_pages = search_similar_chunks(search_query)
+        context_pages = search_similar_chunks(question)
 
         # Generate response using OpenAI with original question
         response = generate_response(question, context_pages, history)
-        log_interaction(question, search_query, history, context_pages, "prompt_log", response)
+        # log_interaction(question, question, history, context_pages, "prompt_log", response)
         
 
 
