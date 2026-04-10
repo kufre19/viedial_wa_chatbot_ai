@@ -145,20 +145,15 @@ def rerank_chunks(query, chunks, top_n=5):
     return sorted_chunks[:top_n]
 
 
-def search_similar_chunks(query, initial_n=20, final_n=5):
-    """Search for chunks most similar to the query, then rerank."""
+def search_similar_chunks(query, initial_n=5):
+    """Search for chunks most similar to the query using ChromaDB similarity ranking."""
     results = diabetes_collection.query(query_texts=[query], n_results=initial_n)
     candidate_chunks = results["documents"][0]
-    
-   
-    
+
     if not candidate_chunks:
         return []
 
-    print("re ranking chunks")
-    reranked = rerank_chunks(query, candidate_chunks, top_n=final_n)
-    
-    return reranked
+    return candidate_chunks
 
 
 def generate_response(query, context_chunks, history=[]):
@@ -209,7 +204,7 @@ def generate_response(query, context_chunks, history=[]):
     ]
 
     response = openai_client.chat.completions.create(
-        model="gpt-4-turbo",
+        model="gpt-4o",
         messages=messages,
         temperature=0.7,
         max_tokens=1000,
@@ -233,7 +228,7 @@ def correct_grammar_and_spellings(question):
     I'll provide you with a question. Please correct the grammar and spellings of the question and return only the corrected question.
     """
     response = openai_client.chat.completions.create(
-        model="gpt-4-turbo",
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",
@@ -266,7 +261,7 @@ def auto_generate_chat_title(question):
     RESPONSE (ONLY THE TITLE):
     """
     response = openai_client.chat.completions.create(
-        model="gpt-4-turbo",
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",
@@ -307,7 +302,7 @@ def formulate_search_query(question, history=[]):
     """
     
     response = openai_client.chat.completions.create(
-        model="gpt-4-turbo",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are a query reformulation expert."},
             {"role": "user", "content": prompt},
