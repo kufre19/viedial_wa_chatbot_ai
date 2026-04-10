@@ -5,6 +5,7 @@ import datetime
 import openai
 import chromadb
 import traceback
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 import pypdf
@@ -117,35 +118,30 @@ def semantic_chunk(text, max_sentences_per_chunk=10, similarity_threshold=0.7):
 
 
 def rerank_chunks(query, chunks, top_n=5):
-    """Rerank chunks based on relevance to the query using OpenAI."""
-    scores = []
-    for chunk in chunks:
-        prompt = f"""
-        Rate the relevance of the following text to the query on a scale of 0 to 10, where 10 is highly relevant.
+    """Rerank chunks based on relevance to the query using OpenAI, scoring all chunks concurrently."""
+
+    def score_chunk(chunk):
+        prompt = f"""Rate the relevance of the following text to the query on a scale of 0 to 10, where 10 is highly relevant.
         Only respond with the number.
 
         Query: {query}
-        Text: {chunk[:1000]}  # Truncate to avoid token limits
-        """
-
-        # log the prompt
-        
-    
-        
-        response = openai_client.chat.completions.create(
-            model="gpt-4-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0,
-            max_tokens=1
-        )
+        Text: {chunk[:1000]}"""
         try:
-            score = float(response.choices[0].message.content.strip())
+            response = openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0,
+                max_tokens=1
+            )
+            return float(response.choices[0].message.content.strip())
         except:
-            score = 0
-        scores.append(score)
-    
-    # Sort chunks by score descending
-    sorted_chunks = [chunk for _, chunk in sorted(zip(scores, chunks), key=lambda x: x[0], reverse=True)]
+            return 0
+
+    with ThreadPoolExecutor(max_workers=len(chunks)) as executor:
+        futures = {executor.submit(score_chunk, chunk): chunk for chunk in chunks}
+        scores = {futures[f]: f.result() for f in as_completed(futures)}
+
+    sorted_chunks = sorted(chunks, key=lambda c: scores[c], reverse=True)
     return sorted_chunks[:top_n]
 
 
