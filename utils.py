@@ -324,13 +324,14 @@ def get_answer_for_question(question, history=[]):
         # Search for relevant pages using reformulated query
         context_pages = search_similar_chunks(question)
 
+
         # Generate response using OpenAI with original question
         response = generate_response(question, context_pages, history)
         # log_interaction(question, question, history, context_pages, "prompt_log", response)
         
 
 
-        return {"success": True, "answer": response, "sources": len(context_pages)}
+        return {"success": True, "answer": response}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
