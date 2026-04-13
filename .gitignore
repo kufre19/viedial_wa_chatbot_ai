@@ -4,7 +4,7 @@
 /oldchroma_db_old/
 /upload/
 /logs/
-/chroma_db/
+/chroma_db/*
 .env
 viedial_hostinger_ssh
 viedial_hostinger_ssh.pub

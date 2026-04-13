@@ -5,13 +5,19 @@ import datetime
 import openai
 import chromadb
 import traceback
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 import pypdf
 import re
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+import time
+import logging
+
+
+# Basic logging configuration
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 load_dotenv()
@@ -117,33 +123,6 @@ def semantic_chunk(text, max_sentences_per_chunk=10, similarity_threshold=0.7):
 
 
 
-def rerank_chunks(query, chunks, top_n=5):
-    """Rerank chunks based on relevance to the query using OpenAI, scoring all chunks concurrently."""
-
-    def score_chunk(chunk):
-        prompt = f"""Rate the relevance of the following text to the query on a scale of 0 to 10, where 10 is highly relevant.
-        Only respond with the number.
-
-        Query: {query}
-        Text: {chunk[:1000]}"""
-        try:
-            response = openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0,
-                max_tokens=1
-            )
-            return float(response.choices[0].message.content.strip())
-        except:
-            return 0
-
-    with ThreadPoolExecutor(max_workers=len(chunks)) as executor:
-        futures = {executor.submit(score_chunk, chunk): chunk for chunk in chunks}
-        scores = {futures[f]: f.result() for f in as_completed(futures)}
-
-    sorted_chunks = sorted(chunks, key=lambda c: scores[c], reverse=True)
-    return sorted_chunks[:top_n]
-
 
 def search_similar_chunks(query, initial_n=5):
     """Search for chunks most similar to the query using ChromaDB similarity ranking."""
@@ -221,27 +200,6 @@ def generate_response(query, context_chunks, history=[]):
 
 
 
-def correct_grammar_and_spellings(question):
-    """Correct the grammar and spellings of a question."""
-    prompt = f"""
-    You are a helpful assistant that corrects the grammar and spellings of a question.
-    I'll provide you with a question. Please correct the grammar and spellings of the question and return only the corrected question.
-    """
-    response = openai_client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant that corrects the grammar and spellings of a question.",
-            },
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.7,
-        max_tokens=1000,
-    )
-    response_content = response.choices[0].message.content
-    return response_content
-
 
 def auto_generate_chat_title(question):
     """Auto generate a chat title based on the question."""
@@ -317,6 +275,8 @@ def formulate_search_query(question, history=[]):
 
 def get_answer_for_question(question, history=[]):
     """Get answer for a user question using retrieval augmented generation."""
+    start_time = time.perf_counter()
+
     try:
         # Reformulate search query
         # search_query = formulate_search_query(question, history)
@@ -329,6 +289,10 @@ def get_answer_for_question(question, history=[]):
         response = generate_response(question, context_pages, history)
         # log_interaction(question, question, history, context_pages, "prompt_log", response)
         
+           # Calculate duration
+        process_time = time.perf_counter() - start_time
+        
+        logger.info(f" Time: {process_time:.4f}s")
 
 
         return {"success": True, "answer": response}
