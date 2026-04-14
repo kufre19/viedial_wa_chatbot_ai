@@ -15,6 +15,8 @@ import time
 import logging
 from sentence_transformers import CrossEncoder
 
+os.environ['SENTENCE_TRANSFORMERS_HOME'] = 'app_cache'
+os.environ['HF_HOME'] = 'app_cache'
 # Load the cross-encoder model once at startup (avoids reloading on every request)
 reranker_model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
