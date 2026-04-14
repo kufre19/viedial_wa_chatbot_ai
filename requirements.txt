@@ -6,3 +6,4 @@ openai
 dotenv
 scikit-learn
 uvicorn
+sentence-transformers

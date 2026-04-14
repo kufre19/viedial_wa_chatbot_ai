@@ -13,6 +13,10 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import time
 import logging
+from sentence_transformers import CrossEncoder
+
+# Load the cross-encoder model once at startup (avoids reloading on every request)
+reranker_model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
 
 # Basic logging configuration
@@ -124,15 +128,40 @@ def semantic_chunk(text, max_sentences_per_chunk=10, similarity_threshold=0.7):
 
 
 
-def search_similar_chunks(query, initial_n=5):
-    """Search for chunks most similar to the query using ChromaDB similarity ranking."""
+def rerank_chunks(query, chunks, top_n=5):
+    """
+    Rerank a list of chunks against the query using a cross-encoder model.
+
+    The cross-encoder scores each (query, chunk) pair together — unlike ChromaDB
+    which compares separate embeddings — giving more accurate relevance scores.
+    Returns the top_n most relevant chunks sorted by score descending.
+    """
+    # Build (query, chunk) pairs for the model to score
+    pairs = [(query, chunk) for chunk in chunks]
+
+    # Score all pairs — returns a float score per pair (higher = more relevant)
+    scores = reranker_model.predict(pairs)
+
+    # Sort chunks by score descending and return the top N
+    ranked = sorted(zip(scores, chunks), key=lambda x: x[0], reverse=True)
+    return [chunk for _, chunk in ranked[:top_n]]
+
+
+def search_similar_chunks(query, initial_n=20, final_n=5):
+    """
+    Retrieve candidate chunks from ChromaDB then rerank them.
+
+    We cast a wide net (initial_n=20) with ChromaDB's fast vector search,
+    then use the cross-encoder to pick the most relevant final_n chunks.
+    """
     results = diabetes_collection.query(query_texts=[query], n_results=initial_n)
     candidate_chunks = results["documents"][0]
 
     if not candidate_chunks:
         return []
 
-    return candidate_chunks
+    # Rerank candidates and return only the best ones
+    return rerank_chunks(query, candidate_chunks, top_n=final_n)
 
 
 def generate_response(query, context_chunks, history=[]):
@@ -280,8 +309,8 @@ def get_answer_for_question(question, history=[]):
     try:
         # Reformulate search query
         # search_query = formulate_search_query(question, history)
-        
-        # Search for relevant pages using reformulated query
+
+        # Retrieve from ChromaDB and rerank — returns best final_n chunks
         context_pages = search_similar_chunks(question)
 
 
