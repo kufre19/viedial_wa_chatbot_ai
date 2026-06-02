@@ -325,7 +325,7 @@ def get_answer_for_question(question, history=[]):
            # Calculate duration
         # process_time = time.perf_counter() - start_time
         
-        logger.info(f" Time: {process_time:.4f}s")
+        # logger.info(f" Time: {process_time:.4f}s")
 
 
         return {"success": True, "answer": response}
