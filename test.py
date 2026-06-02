@@ -1,11 +1,5 @@
 import utils
-import os
-import json
+# import tiktoken
 
-question = "is diabetes hereditary?"
 
-answer = utils.get_answer_for_question(question)
-with open("answer.json", "w") as f:
-    json.dump(answer, f)
-
-print(answer)
+utils.process_folder_and_create_embeddings("documents/pregnancy_docs")

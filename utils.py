@@ -347,26 +347,26 @@ def create_embeddings_from_folder(folder_path):
         )
 
         # Step 2: Clear existing data
-        log_data["steps"].append({"step": "clear_existing_data", "status": "started"})
-        try:
-            existing_ids = collection.get()["ids"]
-            if existing_ids:
-                collection.delete(ids=existing_ids)
-            log_data["steps"][-1].update(
-                {
-                    "status": "completed",
-                    "ids_deleted": len(existing_ids) if existing_ids else 0,
-                }
-            )
-        except Exception as delete_error:
-            log_data["steps"][-1].update(
-                {
-                    "status": "failed",
-                    "error": str(delete_error),
-                    "note": "Failed to delete existing data, continuing with adding new chunks",
-                }
-            )
-            print(f"Warning: Failed to delete existing data: {delete_error}")
+        # log_data["steps"].append({"step": "clear_existing_data", "status": "started"})
+        # try:
+        #     existing_ids = collection.get()["ids"]
+        #     if existing_ids:
+        #         collection.delete(ids=existing_ids)
+        #     log_data["steps"][-1].update(
+        #         {
+        #             "status": "completed",
+        #             "ids_deleted": len(existing_ids) if existing_ids else 0,
+        #         }
+        #     )
+        # except Exception as delete_error:
+        #     log_data["steps"][-1].update(
+        #         {
+        #             "status": "failed",
+        #             "error": str(delete_error),
+        #             "note": "Failed to delete existing data, continuing with adding new chunks",
+        #         }
+        #     )
+        #     print(f"Warning: Failed to delete existing data: {delete_error}")
 
         # Step 3: Process all PDFs
         log_data["steps"].append({"step": "process_pdfs", "status": "started"})
