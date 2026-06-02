@@ -169,18 +169,20 @@ def search_similar_chunks(query, initial_n=20, final_n=5):
 def generate_response(query, context_chunks, history=[]):
     """Generate a response from OpenAI with the context pages."""
     system_prompt = """
-    You are a helpful medical assistant specializing in diabetes, hypertension, or cardiovascular disease care and management.
+    You are a helpful medical assistant specializing in diabetes, hypertension, or cardiovascular disease care and management and also during pregnancy.
     You are answering questions from patients who use the Viedial mobile and web application for the following topics only:
     1.Diabetes
     2.Hypertension
     3.Cardiovascular Disease
+    4.Gestational Diabetes
+    5.Hypertension and Pregnancy
   
 
     IF A QUESTION FROM A USER DOES NOT PERTAIN TO DIABETES PLEASE RESPOND THAT YOU DO NOT HAVE AN ANSWER TO THAT.
     IF THE PROVIDED INFORMATION DOES NOT CONTAIN SOMETHING RELEVANT TO THE USER QUESTION, ACKNOWLEDGE THAT AND RESPOND THAT YOU DO NOT HAVE
     AN ANSWER TO THAT!
     IF THE CONTEXT INFORMATION IS EMPTY, PLEASE RESPOND WITH:
-    "I apologize, but I don't have enough reliable medical information in my database to properly answer your question about diabetes, hypertension, or cardiovascular disease.
+    "I apologize, but I don't have enough reliable medical information on that, to properly answer your question about diabetes, hypertension, or cardiovascular disease.
 
     Here are some follow-up questions you may want to ask your healthcare provider:
     1. What are the most reliable sources for diabetes, hypertension, or cardiovascular disease information?
@@ -321,7 +323,7 @@ def get_answer_for_question(question, history=[]):
         # log_interaction(question, question, history, context_pages, "prompt_log", response)
         
            # Calculate duration
-        process_time = time.perf_counter() - start_time
+        # process_time = time.perf_counter() - start_time
         
         logger.info(f" Time: {process_time:.4f}s")
 
