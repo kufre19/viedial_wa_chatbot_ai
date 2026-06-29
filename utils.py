@@ -238,7 +238,7 @@ def auto_generate_chat_title(question):
     """Auto generate a chat title based on the question."""
     prompt = f"""
     You are a helpful medical assistant specializing in diabetes, hypertension, or cardiovascular disease care and management.
-    You are answering questions from patients who use the Viedial mobile and web application for the following topics only:
+    You are answering questions from patients for the following topics only:
     1.Daibetes
     2.Hypertension
     3.Cardiovascular Disease
@@ -266,44 +266,41 @@ def auto_generate_chat_title(question):
     response_content = response.choices[0].message.content
     return {"success": True, "title": response_content}
 
-
-def formulate_search_query(question, history=[]):
-    """Reformulate the user's question into a standalone search query using conversation history."""
-    if not history:
-        return question
-    
-    # Format history as string
-    history_str = "\n".join([f"{msg['role'].capitalize()}: {msg['content']}" for msg in history])
-    
+def auto_generate_question_query(topic):
+    """Auto generate a question/query to be used based on the topic."""
     prompt = f"""
-    You are an assistant that reformulates user questions for semantic search in a diabetes knowledge base.
+    You are a helpful medical assistant specializing in diabetes, hypertension, or cardiovascular disease care and management.
+    You help generate question/search queries that will be used by the agent system to query our database for more information for the following topics only:
+    1.Daibetes
+    2.Hypertension
+    3.Cardiovascular Disease
+    4.Pregnancy and Diabetes/Hypertension
     
-    Given the conversation history and the latest user question, create a standalone search query that:
-    - Captures the full intent of the latest question in the context of the history.
-    - Is clear, complete, and self-contained (doesn't rely on pronouns or implicit references).
-    - Is phrased as a question or search phrase suitable for retrieving relevant medical information.
-    - Preserves the original meaning and any specific requests (e.g., "explain like I'm 5").
-    
-    Only output the reformulated search query, nothing else.
-    
-    Conversation history:
-    {history_str}
-    
-    Latest question: {question}
+    Your query should be able to invoke rich content when used to query the database, users should be able to get full information on what the topic is about and
+    the information provided to them should be usesful.
+
+
+
+    TOPIC:
+    {topic}
+
+    RESPONSE (ONLY THE SEARCH QUERY):
     """
-    
     response = openai_client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "You are a query reformulation expert."},
+            {
+                "role": "system",
+                "content": "You are a helpful, accurate, and compassionate diabetes, hypertension, or cardiovascular disease care assistant.",
+            },
             {"role": "user", "content": prompt},
         ],
-        temperature=0.3,
-        max_tokens=100,
+        temperature=0.7,
+        max_tokens=1000,
     )
-    
-    reformulated = response.choices[0].message.content.strip()
-    return reformulated
+    response_content = response.choices[0].message.content
+    return {"success": True, "query": response_content}
+
 
 
 def get_answer_for_question(question, history=[]):
@@ -311,8 +308,7 @@ def get_answer_for_question(question, history=[]):
     start_time = time.perf_counter()
 
     try:
-        # Reformulate search query
-        # search_query = formulate_search_query(question, history)
+      
 
         # Retrieve from ChromaDB and rerank — returns best final_n chunks
         context_pages = search_similar_chunks(question)
