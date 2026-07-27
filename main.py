@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi import HTTPException, status
-from fastapi.responses import JSONResponse
-import os
+from fastapi.responses import JSONResponse,StreamingResponse
 import utils
+import logging
+
+
 
 app = FastAPI()
+
+logger = logging.getLogger("uvicorn.error")
 
 @app.get("/")
 def read_root():
@@ -30,7 +34,7 @@ def auto_generate_chat_title(chat: Chat):
 
 
 @app.post("/api/ask")
-def ask_question(chat: Chat):
+async def ask_question(chat: Chat):
     """Answer a question based on the document."""
 
     
@@ -42,14 +46,20 @@ def ask_question(chat: Chat):
     
     question = chat.question
     history = chat.history or []
+
+    def token_stream():
+        for token in utils.get_answer_for_question(question, history):
+            if not token:        
+                continue
+            yield token  
     
     
-    # Get answer
-    result = utils.get_answer_for_question(question, history)
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content=result
+    return StreamingResponse(
+        token_stream(),
+        media_type="text/plain",  
     )
+        
+        
     
     
 @app.post("/api/generate_question_query")

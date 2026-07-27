@@ -15,10 +15,15 @@ import time
 import logging
 from sentence_transformers import CrossEncoder
 
+load_dotenv()
 os.environ['SENTENCE_TRANSFORMERS_HOME'] = 'app_cache'
-os.environ['HF_HOME'] = 'app_cache'
 # Load the cross-encoder model once at startup (avoids reloading on every request)
-reranker_model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+reranker_model = CrossEncoder(
+    "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    cache_folder=os.getenv('SENTENCE_TRANSFORMERS_HOME'),
+    token=os.getenv("HF_TOKEN"),
+    model_kwargs={"cache_dir": os.getenv('SENTENCE_TRANSFORMERS_HOME') }
+    )
 
 
 # Basic logging configuration
@@ -26,7 +31,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-load_dotenv()
+
 
 # Initialize OpenAI client with API key
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -215,21 +220,24 @@ def generate_response(query, context_chunks, history=[]):
         {"role": "user", "content": user_prompt.strip()},
     ]
 
-    response = openai_client.chat.completions.create(
+    stream = openai_client.chat.completions.create(
         model="gpt-4o",
         messages=messages,
         temperature=0.7,
         max_tokens=1000,
+        stream=True
+
     )
 
-    response_content = response.choices[0].message.content
+    
+    for response in stream:
+        content = response.choices[0].delta.content
+        
+        if content:          # filters None
+            yield content
 
-    # For logging
-    prompt_log = "\n\n".join([f"{m['role'].upper()}: {m['content']}" for m in messages])
 
-    # log_interaction(query, formulated_query, history, context_chunks, prompt_log, response_content)
-
-    return response_content
+    
 
 
 
@@ -265,6 +273,11 @@ def auto_generate_chat_title(question):
     )
     response_content = response.choices[0].message.content
     return {"success": True, "title": response_content}
+
+
+
+
+
 
 def auto_generate_question_query(topic):
     """Auto generate a question/query to be used based on the topic."""
@@ -303,9 +316,11 @@ def auto_generate_question_query(topic):
 
 
 
+
+
+
 def get_answer_for_question(question, history=[]):
     """Get answer for a user question using retrieval augmented generation."""
-    start_time = time.perf_counter()
 
     try:
       
@@ -315,18 +330,15 @@ def get_answer_for_question(question, history=[]):
 
 
         # Generate response using OpenAI with original question
-        response = generate_response(question, context_pages, history)
+       
         # log_interaction(question, question, history, context_pages, "prompt_log", response)
         
-           # Calculate duration
-        # process_time = time.perf_counter() - start_time
-        
-        # logger.info(f" Time: {process_time:.4f}s")
+    
+        for response in generate_response(question, context_pages, history):
+            yield response
 
-
-        return {"success": True, "answer": response}
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        yield False
 
 
 def create_embeddings_from_folder(folder_path):
