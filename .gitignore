@@ -9,3 +9,4 @@ viedial_hostinger_ssh
 viedial_hostinger_ssh.pub
 /.claude/
 /app_cache/
+/chroma_db/
