@@ -417,13 +417,22 @@ def create_embeddings_from_folder(folder_path):
                         print(f"Error processing {pdf_path}: {e}")
                         continue
 
-        # Step 4: Add all chunks in batch
+        # Step 4: Add chunks in batches (OpenAI embeddings max 2048 inputs per request)
+        BATCH_SIZE = 500
         if all_chunks:
-            collection.add(
-                documents=all_chunks,
-                ids=all_ids,
-                metadatas=all_metadatas
-            )
+            for i in range(0, len(all_chunks), BATCH_SIZE):
+                batch_docs = all_chunks[i : i + BATCH_SIZE]
+                batch_ids = all_ids[i : i + BATCH_SIZE]
+                batch_metas = all_metadatas[i : i + BATCH_SIZE]
+                print(
+                    f"Adding embedding batch {i // BATCH_SIZE + 1} "
+                    f"({len(batch_docs)} chunks, {i + 1}-{i + len(batch_docs)} of {len(all_chunks)})"
+                )
+                collection.add(
+                    documents=batch_docs,
+                    ids=batch_ids,
+                    metadatas=batch_metas,
+                )
 
         log_data["steps"][-1].update(
             {
