@@ -1,0 +1,28 @@
+on:
+  push:
+    branches: 
+      - main
+  
+name: 🚀 Deploy chatbot
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      with:
+        server: ftp://76.13.120.40:21
+        username:  ${{ secrets.ftp_username }}
+        password: ${{ secrets.ftp_password }}
+        protocol: ftp
+        server-dir:  .
+        timeout: 1200000
+        exclude: |
+          **/.git*
+          **/node_modules/**
+          **/.env
+
