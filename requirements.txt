@@ -8,3 +8,4 @@ dotenv
 scikit-learn
 uvicorn
 sentence-transformers
+gunicorn
