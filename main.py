@@ -79,9 +79,17 @@ def generate_question_query(topic: Topic):
     if "success" in generated_query and  generated_query["success"]:
         question = generated_query["query"]
         chat_title =  utils.auto_generate_chat_title(question)
-        response = utils.get_answer_for_question(question,[])
-        response["title"] = chat_title["title"]
+        # response = utils.get_answer_for_question(question,[],False)
+        answer = ""
+        response = {}
+        
+        for token in utils.get_answer_for_question(question,[]):
+            answer += token
+        
+        response["title"] = chat_title["title"] or "New chat"
         response["generated_question"] = question
+        response["answer"] = answer
+        response["success"] = True
         
         if "success" in response and response["success"]:
              return JSONResponse(

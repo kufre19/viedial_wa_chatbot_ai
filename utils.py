@@ -235,6 +235,9 @@ def generate_response(query, context_chunks, history=[]):
         stream=True
 
     )
+    
+    # if streamResponse == False:
+    #     return stream.choices[0].message.content
 
     
     for response in stream:
@@ -339,6 +342,10 @@ def get_answer_for_question(question, history=[]):
         # Generate response using OpenAI with original question
        
         # log_interaction(question, question, history, context_pages, "prompt_log", response)
+        
+        # if streamResponse == False:
+        #     response  = generate_response(question,context_pages, history,False)
+        #     return {"success": True, "answer": response}
         
     
         for response in generate_response(question, context_pages, history):
