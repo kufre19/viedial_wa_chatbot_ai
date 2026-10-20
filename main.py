@@ -13,7 +13,7 @@ from datetime import datetime
 app = FastAPI()
 
 logger = logging.getLogger("uvicorn.error")
-now  = datetime.now()
+
 
 
 @app.get("/")
@@ -48,7 +48,7 @@ async def ask_question(chat: Chat):
     stream_handler.setFormatter(log_formatter)
     logger.addHandler(stream_handler)
 
-    logger.info(f"Question came in at: {now}")
+    logger.info(f"Question came in at: {datetime.now()}")
     
 
     
@@ -67,11 +67,11 @@ async def ask_question(chat: Chat):
         for token in utils.get_answer_for_question(question, history):
             if not token:        
                 continue
-            logger.info(f"response stream started at: {now} and the character is {token}")
+            logger.info(f"response stream started at: {datetime.now()} and the character is {token}")
             yield token  
     
     
-    logger.info(f"response stream returned at : {now}")
+    logger.info(f"response stream returned at : {datetime.now()}")
     return StreamingResponse(
         token_stream(),
         media_type="text/plain",  
