@@ -4,7 +4,6 @@ from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse,StreamingResponse
 import utils
 import logging
-import sys
 from datetime import datetime
 
 
@@ -12,7 +11,7 @@ from datetime import datetime
 
 app = FastAPI()
 
-logger = logging.getLogger("uvicorn.error")
+logger = logging.getLogger("uvicorn.logger")
 
 
 
@@ -42,12 +41,6 @@ def auto_generate_chat_title(chat: Chat):
 async def ask_question(chat: Chat):
     """Answer a question based on the document."""
 
-    logger.setLevel(logging.INFO)
-    stream_handler = logging.StreamHandler(sys.stdout)
-    log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
-    stream_handler.setFormatter(log_formatter)
-    logger.addHandler(stream_handler)
-
     logger.info(f"Question came in at: {datetime.now()}")
     
 
@@ -67,11 +60,11 @@ async def ask_question(chat: Chat):
         for token in utils.get_answer_for_question(question, history):
             if not token:        
                 continue
-            logger.info(f"response stream started at: {datetime.now()} and the character is {token}")
+            # logger.info(f"response stream started at: {datetime.now()} and the character is {token}")
             yield token  
     
     
-    logger.info(f"response stream returned at : {datetime.now()}")
+    # logger.info(f"response stream returned at : {datetime.now()}")
     return StreamingResponse(
         token_stream(),
         media_type="text/plain",  

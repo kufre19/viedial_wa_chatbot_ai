@@ -23,15 +23,31 @@ import logging
 from sentence_transformers import CrossEncoder
 
 load_dotenv()
-os.environ['SENTENCE_TRANSFORMERS_HOME'] = 'app_cache'
-# Load the cross-encoder model once at startup (avoids reloading on every request)
-reranker_model = CrossEncoder(
-    "cross-encoder/ms-marco-MiniLM-L-6-v2",
-    cache_folder=os.getenv('SENTENCE_TRANSFORMERS_HOME'),
-    token=os.getenv("HF_TOKEN"),
-    model_kwargs={"cache_dir": os.getenv('SENTENCE_TRANSFORMERS_HOME') }
-    )
 
+os.environ['SENTENCE_TRANSFORMERS_HOME'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app_cache')
+os.environ['HF_HUB_OFFLINE'] = '1'
+os.environ['TRANSFORMERS_OFFLINE'] = '1'
+
+# Load the cross-encoder model once at startup (avoids reloading on every request)
+cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app_cache")
+os.environ["SENTENCE_TRANSFORMERS_HOME"] = cache_dir
+
+try:
+    reranker_model = CrossEncoder(
+        "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        cache_folder=cache_dir,
+        local_files_only=True,
+        model_kwargs={"cache_dir": cache_dir, "local_files_only": True},
+        tokenizer_kwargs={"cache_dir": cache_dir, "local_files_only": True},
+    )
+except Exception:
+    # First-time run on a new server: download once, then future startups use cache
+    reranker_model = CrossEncoder(
+        "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        cache_folder=cache_dir,
+        token=os.getenv("HF_TOKEN"),
+        model_kwargs={"cache_dir": cache_dir},
+    )
 
 # Basic logging configuration
 logging.basicConfig(level=logging.INFO)
@@ -161,7 +177,7 @@ def rerank_chunks(query, chunks, top_n=5):
     return [chunk for _, chunk in ranked[:top_n]]
 
 
-def search_similar_chunks(query, initial_n=20, final_n=5):
+def search_similar_chunks(query, initial_n=10, final_n=5):
     """
     Retrieve candidate chunks from ChromaDB then rerank them.
 
