@@ -70,11 +70,16 @@ os.makedirs(logs_directory, exist_ok=True)
 
 # Initialize ChromaDB with persistent storage and OpenAI embedding function
 chroma_client = chromadb.PersistentClient(path=db_directory)
-openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-    api_key=openai_api_key, model_name="text-embedding-3-small"
-)
+# openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+#     api_key=openai_api_key, model_name="text-embedding-3-small"
+# )
+
+local_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="BAAI/bge-small-en-v1.5",
+    cache_folder=os.getenv('SENTENCE_TRANSFORMERS_HOME'),)
+
 diabetes_collection = chroma_client.get_or_create_collection(
-    name="diabetes_docs", embedding_function=openai_ef
+    name="diabetes_docs", embedding_function=local_ef
 )
 
 
@@ -128,11 +133,15 @@ def semantic_chunk(text, max_sentences_per_chunk=10, similarity_threshold=0.7):
         return []
     
     # Get embeddings for all sentences
-    response = openai_client.embeddings.create(
-        input=sentences,
-        model="text-embedding-3-small"
-    )
-    embeddings = np.array([embedding.embedding for embedding in response.data])
+    # response = openai_client.embeddings.create(
+    #     input=sentences,
+    #     model="text-embedding-3-small"
+    # )
+
+
+    response = local_ef(sentences)
+ 
+    embeddings = np.array([embedding for embedding in response])
     
     chunks = []
     current_chunk = [sentences[0]]
@@ -379,7 +388,7 @@ def create_embeddings_from_folder(folder_path):
         # Step 1: Create collection
         log_data["steps"].append({"step": "create_collection", "status": "started"})
         collection = chroma_client.get_or_create_collection(
-            name="diabetes_docs", embedding_function=openai_ef
+            name="diabetes_docs", embedding_function=local_ef
         )
         
         log_data["steps"][-1].update(
